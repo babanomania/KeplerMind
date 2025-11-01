@@ -1,11 +1,17 @@
-[project]
+[tool.poetry]
 name = "keplermind"
 version = "0.1.0"
 description = "Agentic learning and reasoning system built around the MCP paradigm"
-authors = [{name = "KeplerMind Team"}]
-requires-python = ">=3.10"
-dependencies = []
+authors = ["KeplerMind Team"]
+readme = "README.md"
+packages = [{ include = "keplermind" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.scripts]
+keplermind = "keplermind.cli:main"
 
 [build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.7.0"]
+build-backend = "poetry.core.masonry.api"
