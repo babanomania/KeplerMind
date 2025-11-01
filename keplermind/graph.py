@@ -16,7 +16,9 @@ from .agents.reflect_and_repair import ReflectionAgent
 from .agents.report import ReporterAgent
 from .agents.research import ResearchAgent
 from .agents.schedule import SchedulerAgent
+from .config import load_config
 from .state import SessionState
+from .tools import EvaluationService, LocalSearchService, SimpleVectorStore
 
 AgentSequence = List
 
@@ -37,16 +39,24 @@ class KeplerMindGraph:
 def build_default_graph() -> KeplerMindGraph:
     """Construct the default KeplerMind agent pipeline."""
 
+    config = load_config()
+    search_service = LocalSearchService(
+        dataset_path=config.search_data_path,
+        default_limit=config.default_search_results,
+    )
+    vector_store = SimpleVectorStore(config.vector_store_path)
+    evaluation_service = EvaluationService(threshold=config.evaluation_threshold)
+
     agents = [
         IntakeAgent(),
-        ResearchAgent(),
-        RAGBuilderAgent(),
+        ResearchAgent(search_service=search_service),
+        RAGBuilderAgent(vector_store=vector_store),
         PlannerAgent(),
-        QuestioningAgent(),
-        CriticAgent(),
+        QuestioningAgent(vector_store=vector_store),
+        CriticAgent(evaluation_service=evaluation_service, vector_store=vector_store),
         ReflectionAgent(),
         ProfileAgent(),
-        ExplanationAgent(),
+        ExplanationAgent(vector_store=vector_store),
         MemoryControllerAgent(),
         SchedulerAgent(),
         ReporterAgent(),
