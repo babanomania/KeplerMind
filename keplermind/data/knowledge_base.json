@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Exploratory Learning Fundamentals",
+    "url": "https://example.com/exploratory-learning",
+    "summary": "Exploratory learning encourages learners to investigate open-ended problems, collect evidence, and iteratively refine their understanding.",
+    "content": "Exploratory learning emphasises curiosity-driven inquiry. Learners form hypotheses, test ideas with lightweight experiments, and reflect on findings to build durable knowledge structures.",
+    "keywords": ["exploratory", "learning", "inquiry", "reflection", "experiments"]
+  },
+  {
+    "title": "Project-Based Learning Workflow",
+    "url": "https://example.com/project-based-learning",
+    "summary": "Project-based learning organises complex challenges into phases of scoping, building, and reflection supported by collaborative feedback.",
+    "content": "A project-based learning workflow begins with defining authentic problems. Teams prototype artefacts, gather peer critique, and use reflections to consolidate skills that transfer to new contexts.",
+    "keywords": ["project", "learning", "workflow", "reflection", "collaboration"]
+  },
+  {
+    "title": "Knowledge Gap Diagnostics",
+    "url": "https://example.com/knowledge-gap-diagnostics",
+    "summary": "Diagnostic questioning surfaces misconceptions by comparing learner responses with high-signal reference material.",
+    "content": "Effective diagnostic instruments combine conceptual and application questions. Responses are evaluated for coverage of critical ideas, enabling targeted interventions that close observed gaps.",
+    "keywords": ["diagnostic", "questions", "evaluation", "misconception", "coverage"]
+  },
+  {
+    "title": "Spaced Repetition Patterns",
+    "url": "https://example.com/spaced-repetition",
+    "summary": "Spaced repetition schedules revisit material with expanding intervals to maximise retention and minimise forgetting.",
+    "content": "Spacing learning sessions leverages the forgetting curve. By increasing intervals after successful retrieval, learners reinforce durable memories while prioritising topics that require additional review.",
+    "keywords": ["spaced", "repetition", "memory", "retention", "schedule"]
+  }
+]

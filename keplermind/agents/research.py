@@ -3,39 +3,35 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Iterable
 
 from .base import LoggingAgent
 from ..state import SessionState
+from ..tools import LocalSearchService, SearchResult
 
 
 class ResearchAgent(LoggingAgent):
-    """Collect lightweight placeholder research notes."""
+    """Collect curated research notes using the configured search tool."""
 
-    def __init__(self) -> None:
+    def __init__(self, search_service: LocalSearchService) -> None:
         super().__init__(name="research")
+        self.search_service = search_service
+
+    def _serialize_results(self, results: Iterable[SearchResult]) -> list[dict]:
+        serialized = []
+        timestamp = datetime.utcnow().isoformat()
+        for item in results:
+            data = item.to_dict()
+            data["retrieved_at"] = timestamp
+            serialized.append(data)
+        return serialized
 
     def run(self, state: SessionState) -> SessionState:
-        self._append_log(state, "Gathering reference sources")
-        if not state.sources:
-            state.sources.extend(
-                [
-                    {
-                        "title": f"Primer on {state.topic}",
-                        "url": "https://example.com/primer",
-                        "summary": "High-level overview compiled for bootstrapping.",
-                        "retrieved_at": datetime.utcnow().isoformat(),
-                    },
-                    {
-                        "title": f"Applications of {state.topic}",
-                        "url": "https://example.com/applications",
-                        "summary": "Key practical scenarios relevant for learners.",
-                        "retrieved_at": datetime.utcnow().isoformat(),
-                    },
-                ]
-            )
-        if not state.notes:
-            state.notes.append(
-                "Initial research placeholders. Replace with live retrieval logic when integrating search APIs."
-            )
-        self._append_log(state, "Research summary prepared")
+        query = state.topic or "Exploratory Learning"
+        limit = state.preferences.get("search_result_count")
+        self._append_log(state, f"Querying knowledge base for '{query}'")
+        results = self.search_service.search(query, limit=limit)
+        state.sources = self._serialize_results(results)
+        state.notes = [result.summary for result in results]
+        self._append_log(state, f"Collected {len(results)} research sources")
         return state
