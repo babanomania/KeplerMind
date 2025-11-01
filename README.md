@@ -6,20 +6,17 @@ architecture described in `AGENTS.md`.
 
 ## Getting Started
 
-1. Create a virtual environment and install the package locally:
+1. Install dependencies with [Poetry](https://python-poetry.org/):
    ```bash
-   python -m venv .venv
-   source .venv/bin/activate
-   pip install -e .
+   poetry install
    ```
 2. Populate the `.env` file with your OpenAI API key before integrating live retrieval.
-3. Execute the default agent pipeline:
-   ```python
-   from keplermind import build_default_graph
-   graph = build_default_graph()
-   state = graph.run()
-   print(state.report)
+3. Execute the default agent pipeline from the command line:
+   ```bash
+   poetry run keplermind --topic "Neural Networks" --goal "Summarize current challenges"
    ```
+   Use `--as-json` to inspect the full session state or omit optional flags to rely on the
+   built-in defaults provided by the Intake agent.
 
 ## Next Steps
 
