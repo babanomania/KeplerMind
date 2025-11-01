@@ -18,11 +18,12 @@ class SkillPrior:
     beta: float = 1.0
 
     def mean(self) -> float:
-        return self.alpha / (self.alpha + self.beta) if (self.alpha + self.beta) else 0.0
+        total = self.alpha + self.beta
+        return self.alpha / total if total else 0.0
 
     def update(self, success: float) -> None:
         self.alpha += success
-        self.beta += 1 - success
+        self.beta += max(0.0, 1 - success)
 
     def sample(self, rng: random.Random | None = None) -> float:
         rng = rng or random
@@ -44,11 +45,19 @@ class PriorsRepository:
         for skill, score in scores.items():
             self.ensure(skill).update(score)
 
-    def as_dict(self) -> dict[str, tuple[float, float]]:
-        return {name: (prior.alpha, prior.beta) for name, prior in self.priors.items()}
+    def as_dict(self) -> dict[str, dict[str, float]]:
+        return {
+            name: {"alpha": prior.alpha, "beta": prior.beta}
+            for name, prior in self.priors.items()
+        }
 
 
-def thompson_sample(skills: Iterable[str], priors: PriorsRepository, *, rng: random.Random | None = None) -> list[str]:
+def thompson_sample(
+    skills: Iterable[str],
+    priors: PriorsRepository,
+    *,
+    rng: random.Random | None = None,
+) -> list[str]:
     rng = rng or random
     scored = []
     for skill in skills:
@@ -58,14 +67,24 @@ def thompson_sample(skills: Iterable[str], priors: PriorsRepository, *, rng: ran
     return [skill for _, skill in scored]
 
 
-def plan_questions(skills: Iterable[str], priors: PriorsRepository, *, count: int = 5, rng: random.Random | None = None) -> list[str]:
+def plan_questions(
+    skills: Iterable[str],
+    priors: PriorsRepository,
+    *,
+    count: int = 5,
+    rng: random.Random | None = None,
+) -> list[str]:
     """Select up to ``count`` skills using Thompson sampling."""
 
     ranked = thompson_sample(skills, priors, rng=rng)
     return ranked[:count]
 
 
-def spaced_repetition_schedule(skills: Mapping[str, float], *, base: datetime | None = None) -> list[dict[str, str]]:
+def spaced_repetition_schedule(
+    skills: Mapping[str, float],
+    *,
+    base: datetime | None = None,
+) -> list[dict[str, str]]:
     """Generate a simple spaced repetition plan based on stability."""
 
     base_time = base or datetime.utcnow()

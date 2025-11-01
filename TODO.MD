@@ -123,21 +123,21 @@
 
 **Objective:** Let KeplerMind explore, clean, and index the topic.
 
-* [ ] `tools/search.py`: Tavily → fallback to DuckDuckGo.
+* [x] `tools/search.py`: Tavily → fallback to DuckDuckGo.
 
-* [ ] `tools/scrape.py`: HTML → readable text extraction.
+* [x] `tools/scrape.py`: HTML → readable text extraction.
 
-* [ ] `nodes/research.py`: orchestrate 8–15 sources, produce `notes[]` + `bibliography.json`.
+* [x] `nodes/research.py`: orchestrate 8–15 sources, produce `notes[]` + `bibliography.json`.
 
-* [ ] `tools/chunk.py`: chunk text into ~900 tokens, 150 overlap.
+* [x] `tools/chunk.py`: chunk text into ~900 tokens, 150 overlap.
 
-* [ ] `tools/embed.py`: embed and store into Chroma.
+* [x] `tools/embed.py`: embed and store into Chroma.
 
-* [ ] `nodes/build_rag.py`: embed chunks → mark `vector_ready=True`.
+* [x] `nodes/build_rag.py`: embed chunks → mark `vector_ready=True`.
 
-* [ ] Prompt: `prompts/hallucination_guard.md`.
+* [x] Prompt: `prompts/hallucination_guard.md`.
 
-* [ ] Test: `tests/test_rag_and_citations.py`.
+* [x] Test: `tests/test_rag_and_citations.py`.
 
 ---
 
@@ -145,16 +145,16 @@
 
 **Objective:** Generate 10 candidate questions, pick top 5 with MCP priors.
 
-* [ ] `nodes/planner.py`:
+* [x] `nodes/planner.py`:
 
   * Read priors, preferences, time budget.
   * Run Thompson sampling → assign difficulty levels.
   * Produce JSON plan with 5-question cap, ≥4 unique skills.
-* [ ] Prompts:
+* [x] Prompts:
 
   * `prompts/planner.md`
   * `prompts/question_gen.md`
-* [ ] Test: `tests/test_planner_priors.py`.
+* [x] Test: `tests/test_planner_priors.py`.
 
 ---
 
@@ -162,24 +162,24 @@
 
 **Objective:** Ask, score, and reflect interactively in CLI.
 
-* [ ] `nodes/ask_and_score.py`:
+* [x] `nodes/ask_and_score.py`:
 
   * Loop over 5 questions, prompt user for answer + self-confidence (1–5).
   * Grade via `scoring_critic.md`.
   * Update Beta priors + log result.
 
-* [ ] `nodes/reflect_and_repair.py`:
+* [x] `nodes/reflect_and_repair.py`:
 
   * Trigger if evidence or score insufficient.
   * Offer minimal repair actions: re-ask, scaffold, lower difficulty.
   * Add `fix_recipe` memory candidate.
 
-* [ ] Prompts:
+* [x] Prompts:
 
   * `prompts/scoring_critic.md`
   * `prompts/reflection_critic.md`
 
-* [ ] Test: `tests/test_reflection_loop.py`.
+* [x] Test: `tests/test_reflection_loop.py`.
 
 ---
 

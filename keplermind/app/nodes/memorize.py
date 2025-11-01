@@ -82,6 +82,7 @@ def run(state: S, *, console: Console | None = None) -> S:
 
     timestamp = datetime.utcnow().isoformat(timespec="seconds")
     candidates = _base_candidates(hydrated, timestamp) + _skill_candidates(hydrated)
+    candidates.extend(hydrated.get("mem_candidates", []))
 
     MEMORY_CONTROLLER.propose(candidates)
     reviewed = MEMORY_CONTROLLER.review(limit=10)
