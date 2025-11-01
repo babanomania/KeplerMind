@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-from pathlib import Path
+import json
 
 from rich.console import Console
 
 from ..state import S
+from ..tools.artifacts import ensure_session_output_dir, register_artifact
 
 
 REPORT_TEMPLATE = """# KeplerMind Session Report
@@ -28,14 +28,10 @@ REPORT_TEMPLATE = """# KeplerMind Session Report
 
 ## Explanations
 {explanation_lines}
+
+## References
+{references}
 """
-
-
-def _ensure_output_dir(session_id: str) -> Path:
-    timestamp = datetime.utcnow().strftime("%Y%m%d-%H%M%S")
-    base_dir = Path("assets/outputs") / f"{timestamp}_{session_id}"
-    base_dir.mkdir(parents=True, exist_ok=True)
-    return base_dir
 
 
 def run(state: S, *, console: Console | None = None) -> S:
@@ -43,7 +39,7 @@ def run(state: S, *, console: Console | None = None) -> S:
     hydrated: S = dict(state)
 
     session_id = hydrated.get("session_id", "session")
-    output_dir = _ensure_output_dir(session_id)
+    output_dir = ensure_session_output_dir(hydrated)
 
     source_lines = "\n".join(
         f"- {src.get('title', 'Source')} ({src.get('url', 'n/a')})" for src in hydrated.get("sources", [])
@@ -72,17 +68,40 @@ def run(state: S, *, console: Console | None = None) -> S:
         plan_lines=plan_lines,
         qa_lines=qa_lines,
         explanation_lines=explanation_lines,
+        references=source_lines,
     )
 
     report_path = output_dir / "report.md"
     report_path.write_text(report_content, encoding="utf-8")
 
-    hydrated.setdefault("artifacts", {})
-    hydrated["artifacts"].update(
-        {
-            "output_dir": {"path": str(output_dir), "description": "Session output directory."},
-            "report": {"path": str(report_path), "description": "Markdown session report.", "kind": "text"},
-        }
+    register_artifact(
+        hydrated,
+        "report",
+        path=report_path,
+        description="Markdown session report.",
+        kind="text",
+    )
+
+    questions_path = output_dir / "questions.jsonl"
+    with questions_path.open("w", encoding="utf-8") as handle:
+        for qa in hydrated.get("qa", []):
+            handle.write(json.dumps(qa) + "\n")
+    register_artifact(
+        hydrated,
+        "questions",
+        path=questions_path,
+        description="Q&A trace in JSONL format.",
+        kind="json",
+    )
+
+    bibliography_path = output_dir / "bibliography.json"
+    bibliography_path.write_text(json.dumps(hydrated.get("sources", []), indent=2), encoding="utf-8")
+    register_artifact(
+        hydrated,
+        "bibliography",
+        path=bibliography_path,
+        description="Source catalogue for the session.",
+        kind="json",
     )
 
     console.log("Report saved to %s", report_path)
