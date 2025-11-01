@@ -9,7 +9,7 @@
 
 **Objective:** Bootstrap CLI environment and core layout.
 
-* [ ] Create folder structure:
+* [x] Create folder structure:
 
   ```
   keplermind/
@@ -23,7 +23,7 @@
     assets/outputs/
     tests/
   ```
-* [ ] Add `requirements.txt` with:
+* [x] Add `requirements.txt` with:
 
   ```
   langchain
@@ -40,21 +40,21 @@
   pydantic>=2
   pytest
   ```
-* [ ] Add `.env.example` with:
+* [x] Add `.env.example` with:
 
   ```
   OPENAI_API_KEY=
   TAVILY_API_KEY=
   ```
-* [ ] Add `.gitignore`:
+* [x] Add `.gitignore`:
   `.env`, `__pycache__`, `assets/outputs/*`, `*.sqlite`, `.DS_Store`
-* [ ] Create `Makefile` with targets:
+* [x] Create `Makefile` with targets:
 
   * `make run`
   * `make test`
   * `make clean`
-* [ ] Add placeholder `README.md` (will later describe CLI usage).
-* [ ] Create `config/settings.py` with model names, chunk sizes, and time budget constants.
+* [x] Add placeholder `README.md` (will later describe CLI usage).
+* [x] Create `config/settings.py` with model names, chunk sizes, and time budget constants.
 
 ---
 
@@ -62,18 +62,18 @@
 
 **Objective:** Implement the brain that orchestrates all nodes.
 
-* [ ] `app/state.py`:
+* [x] `app/state.py`:
   Define `TypedDict S` (topic, goal, priors, sources, plan, questions, qa, profile, explanations, mem_candidates, artifacts).
 
 * [ ] `app/graph.py`:
 
-  * [ ] Wire all nodes: `intake → research → build_rag → planner → ask_and_score → reflect_and_repair → profile → explain → memorize → report`.
-  * [ ] Implement conditional edges: reflection loops and repair checks.
-  * [ ] Print rich-style DAG summary in CLI at startup.
+  * [x] Wire all nodes: `intake → research → build_rag → planner → ask_and_score → reflect_and_repair → profile → explain → memorize → report`.
+  * [x] Implement conditional edges: reflection loops and repair checks.
+  * [x] Print rich-style DAG summary in CLI at startup.
 
 * [ ] `app/main.py`:
 
-  * [ ] Implement a single CLI entrypoint using `argparse`.
+  * [x] Implement a single CLI entrypoint using `argparse`.
   * [ ] Options:
 
     ```
@@ -83,8 +83,8 @@
     --time 300
     --style bullet
     ```
-  * [ ] Log progress with `rich.console` + timestamps.
-  * [ ] On completion: show summary table of scores and output paths.
+  * [x] Log progress with `rich.console` + timestamps.
+  * [x] On completion: show summary table of scores and output paths.
 
 ---
 
@@ -92,30 +92,30 @@
 
 **Objective:** Implement memory persistence and planning priors.
 
-* [ ] `mcp/stores.py`:
+* [x] `mcp/stores.py`:
 
   * SQLite episodic log (`events(id, ts, session, phase, payload)`).
   * Chroma/FAISS semantic store.
   * JSON preference KV (`preferences.json`).
 
-* [ ] `mcp/policies.py`:
+* [x] `mcp/policies.py`:
 
   * scoring/retention formulas.
   * summarization & redaction (truncate >240 chars).
   * top-N class retention logic.
 
-* [ ] `mcp/controller.py`:
+* [x] `mcp/controller.py`:
 
   * `propose()`, `review()`, `commit()`, `retrieve()` with scoring weights.
   * Add audit to episodic log.
 
-* [ ] `mcp/priors.py`:
+* [x] `mcp/priors.py`:
 
   * Beta priors for per-skill knowledge.
   * Thompson sampling for question planning.
   * spaced repetition schedule generator.
 
-* [ ] Test: `tests/test_mcp_policies.py`.
+* [x] Test: `tests/test_mcp_policies.py`.
 
 ---
 
@@ -187,18 +187,18 @@
 
 **Objective:** Derive knowledge profile and explain adaptively.
 
-* [ ] `nodes/profile.py`:
+* [x] `nodes/profile.py`:
 
   * Aggregate skill gap scores, infer level.
   * Save `profile.json`.
 
-* [ ] `nodes/explain.py`:
+* [x] `nodes/explain.py`:
 
   * For low-gap → **light** explanation.
   * For high-gap → **deep** explanation.
   * Add inline citations using `tools/citations.py`.
 
-* [ ] Prompts:
+* [x] Prompts:
 
   * `prompts/explain_light.md`
   * `prompts/explain_deep.md`
@@ -212,7 +212,7 @@
 
 **Objective:** Save durable memories and next review plan.
 
-* [ ] `nodes/memorize.py`:
+* [x] `nodes/memorize.py`:
 
   * Collect `preference`, `anchor_fact`, `fix_recipe`, `gap_signature`.
   * Call `MemoryController` to score and persist.
@@ -229,7 +229,7 @@
 
 **Objective:** Produce final learning report and summary.
 
-* [ ] `nodes/report.py`:
+* [x] `nodes/report.py`:
 
   * Create `report.md`, `profile.json`, `questions.jsonl`, and `bibliography.json`.
   * Append References list.
@@ -251,8 +251,8 @@
 
 **Objective:** Make CLI smooth and enjoyable.
 
-* [ ] Add colored sections using `rich` (headers, progress bars, tables).
-* [ ] Add “orbit” icon or ASCII logo:
+* [x] Add colored sections using `rich` (headers, progress bars, tables).
+* [x] Add “orbit” icon or ASCII logo:
 
   ```
    ☉  KeplerMind — Discover · Reflect · Illuminate
@@ -261,8 +261,8 @@
 
   * If Tavily key missing → DuckDuckGo.
   * If OpenAI key missing → fallback to local embed model (warn).
-* [ ] `--quiet` and `--debug` flags.
-* [ ] Store all outputs in `assets/outputs/<timestamp>/`.
+* [x] `--quiet` and `--debug` flags.
+* [x] Store all outputs in `assets/outputs/<timestamp>/`.
 
 ---
 
