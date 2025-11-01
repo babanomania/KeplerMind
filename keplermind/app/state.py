@@ -58,6 +58,7 @@ class S(TypedDict, total=False):
     embedding_backend: str
     priors: dict[str, Any]
     sources: list[dict[str, Any]]
+    notes: list[str]
     plan: list[dict[str, Any]]
     questions: list[str]
     qa: list[QAResult]

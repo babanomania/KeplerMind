@@ -32,6 +32,7 @@ def run(state: S, *, console: Console | None = None) -> S:
 
     hydrated.setdefault("priors", {})
     hydrated.setdefault("sources", [])
+    hydrated.setdefault("notes", [])
     hydrated.setdefault("plan", [])
     hydrated.setdefault("questions", [])
     hydrated.setdefault("qa", [])
