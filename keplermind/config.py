@@ -24,6 +24,9 @@ class AppConfig:
     evaluation_threshold: float
     tavily_api_key: Optional[str] = None
     search_api_url: Optional[str] = None
+    openai_api_key: Optional[str] = None
+    openai_model: str = "gpt-4o-mini"
+    openai_base_url: Optional[str] = None
 
     def validate(self) -> None:
         """Validate that configuration values are well formed."""
@@ -33,16 +36,21 @@ class AppConfig:
         if self.default_search_results <= 0:
             errors.append("default_search_results must be greater than zero")
 
-        if not self.search_data_path.is_file():
-            errors.append(f"search data file not found: {self.search_data_path}")
-
         if self.search_provider not in {"local", "tavily"}:
             errors.append(
                 "search_provider must be either 'local' or 'tavily'"
             )
 
+        if self.search_provider == "local" and not self.search_data_path.is_file():
+            errors.append(f"search data file not found: {self.search_data_path}")
+
         if self.search_provider == "tavily" and not self.tavily_api_key:
             errors.append("Tavily search provider requires TAVILY_API_KEY to be set")
+
+        if self.openai_api_key and not self.openai_model:
+            errors.append(
+                "KEPLERMIND_OPENAI_MODEL must be defined when OPENAI_API_KEY is provided"
+            )
 
         if not 0 < self.evaluation_threshold <= 1:
             errors.append("evaluation_threshold must be between 0 and 1")
@@ -88,6 +96,9 @@ def load_config(env: Mapping[str, str] | None = None) -> AppConfig:
 
     tavily_api_key = environment.get("TAVILY_API_KEY")
     search_api_url = environment.get("KEPLERMIND_SEARCH_URL")
+    openai_api_key = environment.get("OPENAI_API_KEY")
+    openai_model = environment.get("KEPLERMIND_OPENAI_MODEL", "gpt-4o-mini")
+    openai_base_url = environment.get("OPENAI_BASE_URL")
 
     vector_store_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -103,6 +114,9 @@ def load_config(env: Mapping[str, str] | None = None) -> AppConfig:
         evaluation_threshold=evaluation_threshold,
         tavily_api_key=tavily_api_key,
         search_api_url=search_api_url,
+        openai_api_key=openai_api_key,
+        openai_model=openai_model,
+        openai_base_url=openai_base_url,
     )
 
     config.validate()
