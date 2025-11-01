@@ -30,6 +30,7 @@ class KeplerMindGraph:
             "profile",
             "explain",
             "memorize",
+            "schedule",
             "report",
         ]
         self.descriptions: Dict[str, str] = {
@@ -42,6 +43,7 @@ class KeplerMindGraph:
             "profile": "Infer skill levels from QA performance.",
             "explain": "Draft adaptive explanations per skill.",
             "memorize": "Aggregate memory candidates for persistence.",
+            "schedule": "Plan the next review sessions via spaced repetition.",
             "report": "Write a Markdown report and register artifacts.",
         }
 
@@ -55,6 +57,7 @@ class KeplerMindGraph:
             "profile": lambda state: nodes.profile.run(state, console=self.console),
             "explain": lambda state: nodes.explain.run(state, console=self.console),
             "memorize": lambda state: nodes.memorize.run(state, console=self.console),
+            "schedule": lambda state: nodes.schedule.run(state, console=self.console),
             "report": lambda state: nodes.report.run(state, console=self.console),
         }
 

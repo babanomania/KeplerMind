@@ -29,6 +29,9 @@ REPORT_TEMPLATE = """# KeplerMind Session Report
 ## Explanations
 {explanation_lines}
 
+## Next Review Plan
+{schedule_lines}
+
 ## References
 {references}
 """
@@ -59,6 +62,12 @@ def run(state: S, *, console: Console | None = None) -> S:
         f"- {name}: {content}" for name, content in hydrated.get("explanations", {}).items()
     ) or "- No explanations"
 
+    schedule_lines = "\n".join(
+        f"- {entry.get('skill', 'Skill')}: review at {entry.get('review_at', 'n/a')}"
+        + (f" (stability {entry.get('stability')})" if entry.get("stability") is not None else "")
+        for entry in hydrated.get("next_review", [])
+    ) or "- No schedule generated"
+
     report_content = REPORT_TEMPLATE.format(
         topic=hydrated.get("topic", "Unknown"),
         goal=hydrated.get("goal", "Undefined"),
@@ -68,6 +77,7 @@ def run(state: S, *, console: Console | None = None) -> S:
         plan_lines=plan_lines,
         qa_lines=qa_lines,
         explanation_lines=explanation_lines,
+        schedule_lines=schedule_lines,
         references=source_lines,
     )
 
