@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 from typing import Any
 
 from rich.console import Console
@@ -29,6 +30,23 @@ def build_parser() -> argparse.ArgumentParser:
 
 def _print_logo(console: Console) -> None:
     console.print(f"[bold blue]{LOGO}[/bold blue]")
+
+
+def _detect_backends(console: Console) -> dict[str, str]:
+    """Identify which external services are available and warn if falling back."""
+
+    tavily_key = os.getenv("TAVILY_API_KEY")
+    openai_key = os.getenv("OPENAI_API_KEY")
+
+    search_backend = "tavily" if tavily_key else "duckduckgo"
+    embedding_backend = "openai" if openai_key else "local"
+
+    if not tavily_key:
+        console.log("Tavily API key missing; using DuckDuckGo search fallback.")
+    if not openai_key:
+        console.log("OpenAI API key missing; using local embedding fallback.")
+
+    return {"search_backend": search_backend, "embedding_backend": embedding_backend}
 
 
 def _summary_table(state: S) -> Table:
@@ -78,6 +96,7 @@ def main(argv: list[str] | None = None) -> S:
     if not args.quiet:
         _print_logo(console)
 
+    backends = _detect_backends(console)
     graph = build_graph(console=console, max_repairs=max(args.max_repairs, 0))
     if not args.quiet:
         graph.print_dag_summary()
@@ -89,6 +108,7 @@ def main(argv: list[str] | None = None) -> S:
         "time_budget": args.time,
         "style": args.style,
     }
+    initial_state.update(backends)
 
     final_state = graph.run(initial_state)
 

@@ -65,16 +65,16 @@
 * [x] `app/state.py`:
   Define `TypedDict S` (topic, goal, priors, sources, plan, questions, qa, profile, explanations, mem_candidates, artifacts).
 
-* [ ] `app/graph.py`:
+* [x] `app/graph.py`:
 
-  * [x] Wire all nodes: `intake → research → build_rag → planner → ask_and_score → reflect_and_repair → profile → explain → memorize → report`.
+  * [x] Wire all nodes: `intake → research → build_rag → planner → ask_and_score → reflect_and_repair → profile → explain → memorize → schedule → report`.
   * [x] Implement conditional edges: reflection loops and repair checks.
   * [x] Print rich-style DAG summary in CLI at startup.
 
-* [ ] `app/main.py`:
+* [x] `app/main.py`:
 
   * [x] Implement a single CLI entrypoint using `argparse`.
-  * [ ] Options:
+  * [x] Options:
 
     ```
     --topic "Kafka Architecture"
@@ -204,7 +204,7 @@
   * `prompts/explain_deep.md`
   * `prompts/cite_merge.md`
 
-* [ ] Test: `tests/test_explain.py`.
+* [x] Test: `tests/test_explain.py`.
 
 ---
 
@@ -217,11 +217,11 @@
   * Collect `preference`, `anchor_fact`, `fix_recipe`, `gap_signature`.
   * Call `MemoryController` to score and persist.
 
-* [ ] `nodes/schedule.py`:
+* [x] `nodes/schedule.py`:
 
   * Compute `next_review.json` using gap/stability ratio.
 
-* [ ] Test: `tests/test_mcp_commit.py`.
+* [x] Test: `tests/test_mcp_commit.py`.
 
 ---
 
@@ -243,7 +243,7 @@
     ```
   * Display output paths.
 
-* [ ] Test: `tests/test_report.py`.
+* [x] Test: `tests/test_report.py`.
 
 ---
 
@@ -257,7 +257,7 @@
   ```
    ☉  KeplerMind — Discover · Reflect · Illuminate
   ```
-* [ ] Graceful fallbacks:
+* [x] Graceful fallbacks:
 
   * If Tavily key missing → DuckDuckGo.
   * If OpenAI key missing → fallback to local embed model (warn).

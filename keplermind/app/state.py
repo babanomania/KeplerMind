@@ -54,6 +54,8 @@ class S(TypedDict, total=False):
     level_hint: str
     time_budget: int
     style: str
+    search_backend: str
+    embedding_backend: str
     priors: dict[str, Any]
     sources: list[dict[str, Any]]
     plan: list[dict[str, Any]]
@@ -61,6 +63,7 @@ class S(TypedDict, total=False):
     qa: list[QAResult]
     profile: ProfilePayload
     explanations: dict[str, str]
+    next_review: list[dict[str, str]]
     mem_candidates: list[dict[str, Any]]
     artifacts: dict[str, ArtifactInfo]
     reflection: ReflectionState
