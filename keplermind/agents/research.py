@@ -7,7 +7,7 @@ from typing import Iterable
 
 from .base import LoggingAgent
 from ..state import SessionState
-from ..tools import LocalSearchService, SearchResult
+from ..tools import LocalSearchService, SearchError, SearchResult
 
 
 class ResearchAgent(LoggingAgent):
@@ -30,7 +30,11 @@ class ResearchAgent(LoggingAgent):
         query = state.topic or "Exploratory Learning"
         limit = state.preferences.get("search_result_count")
         self._append_log(state, f"Querying knowledge base for '{query}'")
-        results = self.search_service.search(query, limit=limit)
+        try:
+            results = self.search_service.search(query, limit=limit)
+        except SearchError as exc:
+            self._append_log(state, f"Search failed: {exc}")
+            results = []
         state.sources = self._serialize_results(results)
         state.notes = [result.summary for result in results]
         self._append_log(state, f"Collected {len(results)} research sources")
