@@ -1,0 +1,11 @@
+[project]
+name = "keplermind"
+version = "0.1.0"
+description = "Agentic learning and reasoning system built around the MCP paradigm"
+authors = [{name = "KeplerMind Team"}]
+requires-python = ">=3.10"
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
