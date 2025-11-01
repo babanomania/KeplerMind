@@ -1,0 +1,13 @@
+langchain
+langgraph
+chromadb
+duckduckgo-search
+openai
+readability-lxml
+requests
+pandas
+numpy
+rich
+python-dotenv
+pydantic>=2
+pytest
